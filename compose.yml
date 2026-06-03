@@ -1,0 +1,39 @@
+services:
+    api:
+        container_name: api
+        build: ./api
+        ports:
+            - "8000:8000"
+        environment:
+            DATABASE_URL: postgres://root:root@db:5432/recido
+            RUST_LOG: debug
+        develop:
+            watch:
+                - action: rebuild
+                  path: ./api/src
+                - action: rebuild
+                  path: ./api/Cargo.toml
+        depends_on:
+            db:
+                condition: service_healthy
+
+    db:
+        image: postgres:16-alpine
+        container_name: db
+        ports:
+            - "5434:5432"
+        environment:
+            POSTGRES_USER: root
+            POSTGRES_PASSWORD: root
+            POSTGRES_DB: recido
+        volumes:
+            - pg_data:/var/lib/postgresql/data
+            - ./db/recido.sql:/docker-entrypoint-initdb.d/recido.sql:ro
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U root -d recido"]
+            interval: 5s
+            timeout: 5s
+            retries: 10
+
+volumes:
+    pg_data:
