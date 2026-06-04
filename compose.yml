@@ -6,6 +6,7 @@ services:
             - "8000:8000"
         environment:
             DATABASE_URL: postgres://root:root@db:5432/recido
+            PORT: 8000
         volumes:
             - ./api:/app
             - cargo_cache:/usr/local/cargo/registry

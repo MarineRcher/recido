@@ -1,7 +1,7 @@
 ## File system
 .DS_Store
 desktop.ini
-
+.env
 ## Editor
 *.swp
 *.swo
