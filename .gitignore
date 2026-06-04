@@ -95,3 +95,4 @@ test-dashboard/
 flake.lock
 /default.nix
 
+target/

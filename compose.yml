@@ -6,13 +6,9 @@ services:
             - "8000:8000"
         environment:
             DATABASE_URL: postgres://root:root@db:5432/recido
-            RUST_LOG: debug
-        develop:
-            watch:
-                - action: rebuild
-                  path: ./api/src
-                - action: rebuild
-                  path: ./api/Cargo.toml
+        volumes:
+            - ./api:/app
+            - cargo_cache:/usr/local/cargo/registry
         depends_on:
             db:
                 condition: service_healthy
@@ -37,3 +33,4 @@ services:
 
 volumes:
     pg_data:
+    cargo_cache:
