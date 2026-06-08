@@ -1,39 +1,19 @@
-use std::sync::Arc;
-use axum::{ Router, routing::get};
-use dotenvy::dotenv;
-use sqlx::{PgPool, postgres::PgPoolOptions};
+
+mod db;
+mod router;
 mod handler;
-use handler::hello_world;
+mod models;
 
 pub struct AppState {
-    pub db: PgPool,
+    pub db: sqlx::PgPool,
 }
 
 #[tokio::main]
 async fn main() {
-    dotenv().ok();
-    let db_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
-    let pool = match PgPoolOptions::new()
-        .max_connections(10)
-        .connect(&db_url)
-        .await
-    {
-        Ok(pool) => {
-            println!("Connected to DB successfully");
-            pool
-        }
-        Err(err) => {
-            println!("Failed to connect to DB: {}", err);
-            std::process::exit(1);
-        }
-    };
+    let pool = db::create_pool().await;
+    let app = router::entrypoint::create_router(pool);
 
-    let app = Router::new()
-        .route("/api", get(hello_world))
-        .with_state(Arc::new(AppState { db: pool.clone() }));
-
-    // run our app with hyper, listening globally on port 3000
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
-    println!("Server started successfully at 0.0.0.0:3000");
+    println!("Server started successfully at 127.0.0.0:3000");
     axum::serve(listener, app).await.unwrap();
 }
