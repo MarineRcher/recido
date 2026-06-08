@@ -19,7 +19,7 @@ RUN rm -rf src
 # Layer code source — se rebuilde à chaque changement dans src/
 COPY src ./src
 
-EXPOSE 8000
+EXPOSE 3000
 
 CMD ["cargo", "watch", "-x", "run"]
 

@@ -1,30 +1,39 @@
-mod config;
-mod db;
+use std::sync::Arc;
+use axum::{ Router, routing::get};
+use dotenvy::dotenv;
+use sqlx::{PgPool, postgres::PgPoolOptions};
+mod handler;
+use handler::hello_world;
 
-use axum::{routing::get, Router};
-
-// AppState est partagé entre tous les handlers
-#[derive(Clone)]
 pub struct AppState {
-    pub db: sqlx::PgPool,
+    pub db: PgPool,
 }
 
 #[tokio::main]
 async fn main() {
-    let config = config::Config::from_env();
-    let pool = db::create_pool(&config.database_url).await;
-    sqlx::query("SELECT 1")
-        .execute(&pool)
+    dotenv().ok();
+    let db_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+    let pool = match PgPoolOptions::new()
+        .max_connections(10)
+        .connect(&db_url)
         .await
-        .expect("La DB ne répond pas");
-    println!("DB OK");
+    {
+        Ok(pool) => {
+            println!("Connected to DB successfully");
+            pool
+        }
+        Err(err) => {
+            println!("Failed to connect to DB: {}", err);
+            std::process::exit(1);
+        }
+    };
 
     let app = Router::new()
-        .route("/", get(|| async { "Hello from Recido!" }));
+        .route("/api", get(hello_world))
+        .with_state(Arc::new(AppState { db: pool.clone() }));
 
-    let addr = format!("0.0.0.0:{}", config.port);
-    println!("listen on {addr}");
-
-    let listener = tokio::net::TcpListener::bind(&addr).await.unwrap();
+    // run our app with hyper, listening globally on port 3000
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
+    println!("Server started successfully at 0.0.0.0:3000");
     axum::serve(listener, app).await.unwrap();
 }

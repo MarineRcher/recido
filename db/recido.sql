@@ -30,7 +30,7 @@ CREATE TYPE log_entity AS ENUM (
     'POST', 'FRIENDSHIP', 'SESSION'
 );
 
-CREATE TYPE tag_category AS ENUM ('diet', 'season', 'difficulty', 'cuisine');
+CREATE TYPE tag_category AS ENUM ('diet', 'season', 'difficulty');
 
 CREATE TYPE unit_type AS ENUM ('piece', 'g', 'ml', 'tbsp', 'tsp', 'cup', 'kg', 'l');
 

@@ -7,19 +7,13 @@ edition = "2024"
 argon2 = "0.5.3"
 axum = "0.8.9"
 axum-login = "0.18.0"
-chrono = "0.4.45"
+chrono = { version="0.4.45", features = ["serde"] }
 dotenvy = "0.15.7"
 jsonwebtoken = "10.4.0"
-serde = "1.0.228"
+serde = {version="1.0.228", features = ["derive"] }
 serde_json = "1.0.150"
-sqlx = { version = "0.9.0", features = [
-    "runtime-tokio",
-    "postgres",
-    "uuid",
-    "chrono",
-    "macros",
-] }
-tokio = { version = "1.52.3", features = ["rt-multi-thread"]}
+sqlx = { version = "0.9.0", features = [ "runtime-tokio", "tls-rustls-ring-webpki", "postgres", "chrono", "uuid" ] }
+tokio = { version = "1.52.3", features = ["full"] }
 tower = "0.5.3"
 tower-http = "0.6.11"
-uuid = "1.23.2"
+uuid = {version="1.23.2",  features = ["serde", "v4"] }
