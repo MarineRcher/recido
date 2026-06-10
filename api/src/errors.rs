@@ -29,7 +29,14 @@ impl From<sqlx::Error> for AppError {
         match err {
             sqlx::Error::RowNotFound => AppError::NotFound("Resource not found".to_string()),
             sqlx::Error::Database(db_err) if db_err.is_unique_violation() => {
-                AppError::Conflict("Email or login already taken".to_string())
+                let msg = db_err.message();
+                if msg.contains("users_email_key") {
+                    AppError::Conflict("Email already taken".to_string())
+                } else if msg.contains("users_login_key") {
+                    AppError::Conflict("Login already taken".to_string())
+                } else {
+                    AppError::Conflict("Unique constraint violation".to_string())
+                }
             }
             _ => AppError::InternalError("Database error".to_string()),
         }

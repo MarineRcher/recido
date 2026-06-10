@@ -1,8 +1,19 @@
 use std::sync::Arc;
 use axum::{Json, extract::State, response::IntoResponse, http::StatusCode};
 use serde::{Deserialize, Serialize};
-use crate::{AppState, errors::AppError, utils::password::hash_password};
 use uuid::Uuid;
+use crate::{
+    AppState,
+    errors::AppError,
+    utils::{
+        password::hash_password,
+        validators::{
+            email::validate_email,
+            login::validate_login,
+            password::validate_password,
+        },
+    },
+};
 
 #[derive(Deserialize)]
 pub struct RegisterRequest {
@@ -21,6 +32,10 @@ pub async fn register(
     State(state): State<Arc<AppState>>,
     Json(body): Json<RegisterRequest>,
 ) -> Result<impl IntoResponse, AppError> {
+    validate_email(&body.email)?;
+    validate_login(&body.login)?;
+    validate_password(&body.password)?;
+
     let password_hash = hash_password(&body.password)?;
 
     let user = sqlx::query_as!(
