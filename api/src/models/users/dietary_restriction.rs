@@ -1,6 +1,6 @@
 use sqlx::FromRow;
 use uuid::Uuid;
-use crate::models::user::enums::RestrictionCategory;
+use crate::models::users::enums::RestrictionCategory;
 
 #[derive(Debug, FromRow)]
 pub struct DietaryRestriction {

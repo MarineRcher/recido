@@ -3,7 +3,7 @@ use chrono::{DateTime, Utc};
 use sqlx::FromRow;
 use sqlx::types::JsonValue;
 use uuid::Uuid;
-use crate::models::user::enums::{LogAction, LogEntity};
+use crate::models::users::enums::{LogAction, LogEntity};
 
 #[derive(Debug, FromRow)]
 pub struct Log {

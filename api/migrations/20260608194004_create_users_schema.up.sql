@@ -6,8 +6,8 @@
 CREATE TABLE users.users (
     user_id       UUID        PRIMARY KEY DEFAULT uuid_generate_v4(),
     email         VARCHAR     UNIQUE NOT NULL,
-    password_hash VARCHAR     NOT NULL,
-    pseudo        VARCHAR     UNIQUE NOT NULL,
+    password VARCHAR     NOT NULL,
+    login        VARCHAR     UNIQUE NOT NULL,
     avatar_url    TEXT,
     created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -15,7 +15,7 @@ CREATE TABLE users.users (
 );
 
 CREATE INDEX idx_users_email  ON users.users (email);
-CREATE INDEX idx_users_pseudo ON users.users (pseudo);
+CREATE INDEX idx_users_login ON users.users (login);
 
 -- Trigger updated_at
 CREATE OR REPLACE FUNCTION users.set_updated_at()
