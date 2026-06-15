@@ -1,98 +1,89 @@
-## File system
-.DS_Store
-desktop.ini
+# ============================================================
+# SECRETS
+# ============================================================
 .env
-.env.docker
-## Editor
-*.swp
-*.swo
-Session.vim
-.cproject
-.idea
-*.iml
-.vscode
-.project
-.vim/
-.helix/
-.zed/
-.favorites.json
-.settings/
-.vs/
-.dir-locals.el
+.env.*
+!.env.example
 
-## Tool
-.valgrindrc
-.cargo
-# Included because it is part of the test case
-!/tests/run-make/thumb-none-qemu/example/.cargo
-
-## Configuration
-/bootstrap.toml
-/config.toml
-config.mk
-config.stamp
-no_llvm_build
-
-## Build
-/dl/
-/doc/
-/inst/
-/llvm/
-/mingw-build/
-/build
-/build-rust-analyzer
-/dist/
-/unicode-downloads
-/target
-/library/target
-/src/bootstrap/target
-/src/ci/citool/target
-/src/tools/x/target
-# Created by `x vendor`
-/vendor
-# Created by default with `src/ci/docker/run.sh`
-/obj/
-# Created by nix dev shell / .envrc
-src/tools/nix-dev-shell/flake.lock
-
-## ICE reports
+# ============================================================
+# RUST / API
+# ============================================================
+target/
+cargo_cache/
 rustc-ice-*.txt
 
-## Temporary files
-*~
-\#*
-\#*\#
-.#*
-
-## Tags
-tags
-tags.*
-TAGS
-TAGS.*
-
-## Python
+# ============================================================
+# PYTHON / DJANGO (web)
+# ============================================================
 __pycache__/
 *.py[cod]
-*$py.class
+*.so
+.Python
+.venv/
+dist/
+*.egg-info/
+.coverage
+htmlcov/
+.tox/
+*.log
+local_settings.py
+db.sqlite3
 
-## Node
-node_modules
-/src/doc/rustc-dev-guide/mermaid.min.js
+# ============================================================
+# DART / FLUTTER (mobile)
+# ============================================================
+.dart_tool/
+.packages
+.pub/
+pubspec.lock
+build/
+doc/api/
+.flutter-plugins
+.flutter-plugins-dependencies
 
-## Rustdoc GUI tests
-tests/rustdoc-gui/src/**.lock
+# Android
+*.apk
+*.ap_
+*.dex
+*.class
+.gradle/
+local.properties
+google-services.json
+captures/
+.externalNativeBuild/
+.navigation/
 
-## Test dashboard
-.citool-cache/
-test-dashboard/
+# iOS / macOS
+*.xcscmblueprint
+*.xccheckout
+xcuserdata/
+DerivedData/
+*.moved-aside
+GoogleService-Info.plist
 
-## direnv
-/.envrc
-/.direnv/
+# ============================================================
+# DOCKER
+# ============================================================
+pg_data/
+flutter_cache/
 
-## nix
-/flake.nix
-flake.lock
-/default.nix
+# ============================================================
+# EDITEURS
+# ============================================================
+.vscode/
+.idea/
+*.iml
+.helix/
+.zed/
+*.swp
+*.swo
+tags
 
-target/
+# ============================================================
+# OS
+# ============================================================
+.DS_Store
+._*
+Thumbs.db
+.Trash-*
+.directory
