@@ -30,7 +30,7 @@ services:
 
     web:
         container_name: web
-        build: ./web
+        build: ./recido-web
         ports:
             - "8000:8000"
         env_file:
@@ -40,21 +40,8 @@ services:
             - /opt/venv
         depends_on:
             - api
-        command: python manage.py runserver 0.0.0.0:8000
-
-    mobile:
-        container_name: mobile
-        build: ./mobile
-        ports:
-            - "8080:8080"
-        env_file:
-            - .env
-        volumes:
-            - ./mobile:/app
-            - flutter_cache:/root/.pub-cache
-        command: flutter run -d web-server --web-port 8080 --web-hostname 0.0.0.0
+        command: uv run python manage.py runserver 0.0.0.0:8000
 
 volumes:
     pg_data:
     cargo_cache:
-    flutter_cache:
