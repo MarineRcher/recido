@@ -38,7 +38,7 @@ CREATE TABLE users.roles (
     level      VARCHAR     UNIQUE NOT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
+INSERT INTO users.roles (level) VALUES ('user'), ('admin');
 -- ------------------------------------------------------------
 -- users.user_roles
 -- ------------------------------------------------------------

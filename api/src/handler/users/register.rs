@@ -38,6 +38,8 @@ pub async fn register(
 
     let password_hash = hash_password(&body.password)?;
 
+    let mut tx = state.db.begin().await?;
+
     let user = sqlx::query_as!(
         RegisterResponse,
         r#"
@@ -49,8 +51,25 @@ pub async fn register(
         password_hash,
         body.login,
     )
-    .fetch_one(&state.db)
+    .fetch_one(&mut *tx)
     .await?;
+
+    let role = sqlx::query_scalar!(
+        r#"
+        INSERT INTO users.user_roles (user_id, role_id)
+        SELECT $1, id_role FROM users.roles WHERE level = 'user'
+        RETURNING role_id
+        "#,
+        user.user_id,
+    )
+    .fetch_optional(&mut *tx)
+    .await?;
+
+    if role.is_none() {
+        return Err(AppError::InternalError("Default role 'user' not found".to_string()));
+    }
+
+    tx.commit().await?;
 
     Ok((StatusCode::CREATED, Json(user)))
 }
