@@ -1,5 +1,6 @@
 use crate::errors::AppError;
 
+/// Check password norme is respected
 pub fn validate_password(password: &str) -> Result<(), AppError> {
     if password.len() < 12 {
         return Err(AppError::BadRequest("Password must be at least 12 characters".to_string()));

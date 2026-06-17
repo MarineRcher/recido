@@ -1,5 +1,6 @@
 use crate::errors::AppError;
 
+/// Check if we have an email field
 pub fn validate_email(email: &str) -> Result<(), AppError> {
     let has_at = email.contains('@');
     let parts: Vec<&str> = email.split('@').collect();

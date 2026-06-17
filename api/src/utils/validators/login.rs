@@ -1,5 +1,6 @@
 use crate::errors::AppError;
 
+/// Check if login norme is respected
 pub fn validate_login(login: &str) -> Result<(), AppError> {
     if login.len() < 3 {
         return Err(AppError::BadRequest("Login must be at least 3 characters".to_string()));

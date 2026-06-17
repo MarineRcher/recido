@@ -1,6 +1,12 @@
 use axum::{response::{IntoResponse, Response}, http::StatusCode, Json};
 use serde_json::json;
 
+
+/// Application-wide error type.
+///
+/// Each variant carries a human-readable message and maps to a specific
+/// HTTP status code when converted into a response
+/// [`AppError::into_response`]).
 #[derive(Debug)]
 pub enum AppError {
     NotFound(String),
@@ -10,7 +16,13 @@ pub enum AppError {
     InternalError(String),
 }
 
+
 impl IntoResponse for AppError {
+    /// Converts the error into an HTTP response.
+    ///
+    /// The resulting body is a JSON object of the form
+    /// `{ "error": "<message>" }`, with a status code corresponding to
+    /// the matched [`AppError`] variant.
     fn into_response(self) -> Response {
         let (status, message) = match self {
             AppError::NotFound(msg)      => (StatusCode::NOT_FOUND, msg),
@@ -25,6 +37,11 @@ impl IntoResponse for AppError {
 }
 
 impl From<sqlx::Error> for AppError {
+    /// Converts a low-level [`sqlx::Error`] into an [`AppError`].
+    ///
+    /// This allows handlers to use `?` on `sqlx` calls and have the
+    /// resulting error automatically turned into an appropriate HTTP
+    /// response, without leaking database internals to the client.
     fn from(err: sqlx::Error) -> Self {
         match err {
             sqlx::Error::RowNotFound => AppError::NotFound("Resource not found".to_string()),
