@@ -9,6 +9,7 @@ CREATE TABLE users.users (
     password VARCHAR     NOT NULL,
     login        VARCHAR     UNIQUE NOT NULL,
     avatar_url    TEXT,
+    is_verified   BOOLEAN     NOT NULL DEFAULT FALSE,
     created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     last_login_at TIMESTAMPTZ

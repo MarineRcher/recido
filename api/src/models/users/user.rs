@@ -9,6 +9,7 @@ pub struct User {
     pub password: String,
     pub login: String,
     pub avatar_url: Option<String>,
+    pub is_verified: bool,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
     pub last_login_at: Option<DateTime<Utc>>,
