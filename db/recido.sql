@@ -141,7 +141,6 @@ CREATE TABLE users.logs (
     old_values    JSONB,
     new_values    JSONB,
     ip_address    INET,
-    user_agent    TEXT,
     error_message TEXT,
     created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );

@@ -1,0 +1,42 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        INSERT INTO users.users (email, password, login)\n        VALUES ($1, $2, $3)\n        RETURNING user_id, login\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "user_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "users.users",
+            "name": "user_id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "login",
+        "type_info": "Varchar",
+        "origin": {
+          "Table": {
+            "table": "users.users",
+            "name": "login"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Varchar",
+        "Varchar",
+        "Varchar"
+      ]
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "951a5b7883d6272fed109140fe6a23b473b97ae270250c1c9bfcdc048e436d1c"
+}

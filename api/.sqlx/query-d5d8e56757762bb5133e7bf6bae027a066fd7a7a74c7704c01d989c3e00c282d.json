@@ -1,0 +1,28 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        INSERT INTO users.user_roles (user_id, role_id)\n        SELECT $1, id_role FROM users.roles WHERE level = 'user'\n        RETURNING role_id\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "role_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "users.user_roles",
+            "name": "role_id"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "d5d8e56757762bb5133e7bf6bae027a066fd7a7a74c7704c01d989c3e00c282d"
+}

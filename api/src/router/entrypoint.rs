@@ -10,14 +10,7 @@ use sqlx::PgPool;
 use crate::AppState;
 use super::users::users_router;
 
-/// Builds the application's root [`Router`].
-///
-/// Wraps the given database pool in [`AppState`] (shared via an
-/// [`Arc`] so it can be cheaply cloned across requests), then assembles
-/// all routes:
-/// - `/api/user/*` — user-related routes, nested from
-///   [`users_router`].
-///
+/// Builds the application's root .
 /// # Arguments
 /// * `pool` - The PostgreSQL connection pool to share across all
 ///   handlers via [`AppState`].

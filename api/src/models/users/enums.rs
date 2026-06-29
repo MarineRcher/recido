@@ -8,6 +8,7 @@ pub enum RestrictionCategory {
 #[derive(Debug, Clone, sqlx::Type)]
 #[sqlx(type_name = "log_action", rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum LogAction {
+    Create,
     Delete,
     Login,
     Logout,
@@ -25,3 +26,4 @@ pub enum LogEntity {
     Friendship,
     Session,
 }
+

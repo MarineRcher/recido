@@ -19,7 +19,7 @@ CREATE TYPE meal_type AS ENUM ('breakfast', 'lunch', 'dinner', 'snack');
 
 CREATE TYPE friendship_status AS ENUM ('pending', 'accepted', 'blocked');
 
-CREATE TYPE log_action AS ENUM ('DELETE', 'LOGIN', 'LOGOUT', 'ERROR');
+CREATE TYPE log_action AS ENUM ('DELETE', 'LOGIN', 'LOGOUT', 'ERROR', 'CREATE');
 
 CREATE TYPE log_entity AS ENUM (
     'USER', 'RECIPE', 'INGREDIENT', 'COMMENT',

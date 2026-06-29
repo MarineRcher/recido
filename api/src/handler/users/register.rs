@@ -2,12 +2,12 @@ use std::sync::Arc;
 use axum::{Json, extract::State, response::IntoResponse, http::StatusCode};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
+use axum::extract::ConnectInfo;
+use std::net::SocketAddr;
+
 use crate::{
-    AppState,
-    errors::AppError,
-    utils::{
-        password::hash_password,
-        validators::{
+    AppState, errors::AppError, models::users::{enums::{LogAction, LogEntity}, log::LogEntry}, utils::{
+        logs::insert_log, password::hash_password, validators::{
             email::validate_email,
             login::validate_login,
             password::validate_password,
@@ -30,6 +30,7 @@ pub struct RegisterResponse {
 
 pub async fn register(
     State(state): State<Arc<AppState>>,
+    ConnectInfo(addr): ConnectInfo<SocketAddr>,
     Json(body): Json<RegisterRequest>,
 ) -> Result<impl IntoResponse, AppError> {
     validate_email(&body.email)?;
@@ -68,6 +69,18 @@ pub async fn register(
     if role.is_none() {
         return Err(AppError::InternalError("Default role 'user' not found".to_string()));
     }
+    insert_log(
+        &mut *tx,
+        LogEntry::new(LogAction::Create, LogEntity::User)
+            .user_id(user.user_id)
+            .entity_id(user.user_id)
+            .ip_address(addr.ip())
+            .new_values(serde_json::json!({
+                "email": body.email,
+                "login": body.login,
+            })),
+    )
+    .await?;
 
     tx.commit().await?;
 
