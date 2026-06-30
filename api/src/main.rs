@@ -4,6 +4,7 @@ mod handler;
 mod models;
 mod utils;
 mod errors;
+use std::net::SocketAddr;
 
 /// Shared application state, injected into Axum handlers via the
 /// `State` extractor.
@@ -31,5 +32,11 @@ async fn main() {
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
     println!("Server started successfully at 0.0.0.0:3000");
-    axum::serve(listener, app).await.unwrap();
+
+    axum::serve(
+        listener,
+        app.into_make_service_with_connect_info::<SocketAddr>(),
+    )
+    .await
+    .unwrap();
 }
