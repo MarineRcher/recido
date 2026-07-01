@@ -55,6 +55,21 @@ CREATE TABLE users.users (
 CREATE INDEX idx_users_email  ON users.users (email);
 CREATE INDEX idx_users_login ON users.users (login);
 
+CREATE TABLE users.sessions (
+    session_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES users.users(user_id) ON DELETE CASCADE,
+    refresh_token_hash TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    expires_at TIMESTAMPTZ NOT NULL,
+    last_used_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    ip_address INET,
+    user_agent TEXT,
+    revoked_at TIMESTAMPTZ
+);
+
+CREATE INDEX idx_sessions_user_id ON users.sessions(user_id);
+CREATE UNIQUE INDEX idx_sessions_refresh_token_hash ON users.sessions(refresh_token_hash);
+
 -- Trigger updated_at
 CREATE OR REPLACE FUNCTION users.set_updated_at()
 RETURNS TRIGGER AS $$

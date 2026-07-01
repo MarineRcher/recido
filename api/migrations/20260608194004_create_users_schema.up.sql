@@ -57,20 +57,20 @@ CREATE TABLE users.user_roles (
 -- users.sessions
 -- ------------------------------------------------------------
 CREATE TABLE users.sessions (
-    id_session   UUID        PRIMARY KEY DEFAULT uuid_generate_v4(),
-    user_id      UUID        NOT NULL REFERENCES users.users (user_id) ON DELETE CASCADE,
-    token_hash   VARCHAR     UNIQUE NOT NULL,
-    device_info  VARCHAR,
-    ip_address   INET,
-    created_at   TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    expires_at   TIMESTAMPTZ NOT NULL,
-    last_used_at TIMESTAMPTZ DEFAULT NOW(),
-    is_revoked   BOOLEAN     NOT NULL DEFAULT FALSE
+    session_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES users.users(user_id) ON DELETE CASCADE,
+    refresh_token_hash TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    expires_at TIMESTAMPTZ NOT NULL,
+    last_used_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    ip_address INET,
+    user_agent TEXT,
+    revoked_at TIMESTAMPTZ
 );
 
-CREATE INDEX idx_sessions_token_hash ON users.sessions (token_hash);
-CREATE INDEX idx_sessions_user_id    ON users.sessions (user_id);
-CREATE INDEX idx_sessions_expires_at ON users.sessions (expires_at);
+CREATE INDEX idx_sessions_user_id ON users.sessions(user_id);
+CREATE UNIQUE INDEX idx_sessions_refresh_token_hash ON users.sessions(refresh_token_hash);
+
 
 -- ------------------------------------------------------------
 -- users.dietary_restrictions
@@ -111,3 +111,4 @@ CREATE TABLE users.logs (
 CREATE INDEX idx_logs_user_created    ON users.logs (user_id, created_at);
 CREATE INDEX idx_logs_entity          ON users.logs (entity_type, entity_id, created_at);
 CREATE INDEX idx_logs_errors          ON users.logs (created_at) WHERE action_type = 'ERROR';
+

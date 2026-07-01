@@ -7,8 +7,8 @@
 use std::sync::Arc;
 use axum::Router;
 use sqlx::PgPool;
-use crate::AppState;
-use super::users::users_router;
+use crate::{AppState, router::user::user_router};
+use super::auth::auth_router;
 
 /// Builds the application's root .
 /// # Arguments
@@ -18,6 +18,7 @@ pub fn create_router(pool: PgPool) -> Router {
     let state = Arc::new(AppState { db: pool });
 
     Router::new()
-        .nest("/api/user", users_router())
+        .nest("/api/auth", auth_router())
+        .nest("/api/user", user_router())
         .with_state(state)
 }

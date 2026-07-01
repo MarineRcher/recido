@@ -1,2 +1,3 @@
 pub mod entrypoint;
-pub mod users;
+pub mod auth;
+pub mod user;
