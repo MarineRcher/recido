@@ -2,7 +2,7 @@ use axum::Router;
 use axum::routing::{get};
 use std::sync::Arc;
 use crate::AppState;
-use crate::handler::user::{me::me};
+use crate::handler::user::me::me;
 
 
 /// Builds the user-related sub-router.
